@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useTask } from "@/hooks/useTasks";
 
@@ -17,7 +18,17 @@ const Header = () => {
   return (
     <header className="bg-gray-800 p-4 text-white">
       <div className="container mx-auto flex justify-between items-center">
-        <button onClick={handleHomeClick} className="text-xl font-bold">
+        <button
+          onClick={handleHomeClick}
+          className="flex items-center text-xl font-bold"
+        >
+          <Image
+            src="/favicon.ico"
+            alt="Logo"
+            width={32}
+            height={32}
+            className="mr-2 cursor-pointer"
+          />
           ToDoList
         </button>
         <div className="flex space-x-4">

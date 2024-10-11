@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 const TaskContext = createContext();
 
@@ -48,6 +49,16 @@ export function TaskContextProvider({ children }) {
       }
       const result = await response.json();
       setTasks((prevTasks) => [...prevTasks, result.data]);
+
+      toast.success(`${result.data.name} 新增成功`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -55,7 +66,7 @@ export function TaskContextProvider({ children }) {
     }
   };
 
-  // 更新任務
+  // 編輯任務
   const updateTask = async (id, updatedTask) => {
     setLoading(true);
     setError(null);
@@ -74,9 +85,20 @@ export function TaskContextProvider({ children }) {
         throw new Error(`Error updating task: ${response.statusText}`);
       }
       const result = await response.json();
+
       setTasks((prevTasks) =>
         prevTasks.map((task) => (task.id === id ? result.data : task))
       );
+
+      toast.success(`${result.data.name} 編輯成功`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -103,9 +125,21 @@ export function TaskContextProvider({ children }) {
         throw new Error(`Error updating task status: ${response.statusText}`);
       }
       const result = await response.json();
+
       setTasks((prevTasks) =>
         prevTasks.map((task) => (task.id === id ? result.data : task))
       );
+
+      const statusText = result.data.is_completed ? "已完成" : "未完成";
+      toast.success(`${result.data.name} ${statusText}`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -127,7 +161,20 @@ export function TaskContextProvider({ children }) {
       if (!response.ok) {
         throw new Error(`Error deleting task: ${response.statusText}`);
       }
+
+      const deletedTask = tasks.find((task) => task.id === id);
+
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+
+      toast.success(`${deletedTask.name} 刪除成功`, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (err) {
       setError(err.message);
     } finally {
